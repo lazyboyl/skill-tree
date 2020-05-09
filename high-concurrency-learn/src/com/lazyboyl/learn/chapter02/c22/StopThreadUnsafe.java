@@ -1,18 +1,17 @@
-package com.lazyboyl.learn.chapter02.c02;
+package com.lazyboyl.learn.chapter02.c22;
 
 /**
  * @author linzf
  * @since 2020/5/7
  * 类描述： stop方法导致的数据的不一致
  */
-public class StopThreadSafe {
+public class StopThreadUnsafe {
 
     public static User u = new User();
 
-
-    public static void main(String[] args) {
+    public static void main(String [] args){
         new Thread(new ReadObjectThread()).start();
-        while (true) {
+        while(true){
             Thread t = new Thread(new ChangeObjectThread());
             t.start();
             try {
@@ -20,7 +19,7 @@ public class StopThreadSafe {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ChangeObjectThread.stop = true;
+            t.stop();
         }
     }
 
@@ -29,15 +28,9 @@ public class StopThreadSafe {
      */
     public static class ChangeObjectThread implements Runnable {
 
-        public static Boolean stop = false;
-
         @Override
         public void run() {
             while (true) {
-                if (stop) {
-                    System.out.println("线程停止，退出线程！");
-                    break;
-                }
                 synchronized (u) {
                     int v = (int) System.currentTimeMillis() / 1000;
                     u.setId(v);
@@ -62,9 +55,9 @@ public class StopThreadSafe {
         public void run() {
             while (true) {
                 synchronized (u) {
-                    if (u.getId() != Integer.parseInt(u.getName())) {
-                        System.out.println(u.getId() + "*-----*" + u.getName());
-                    }
+                   if(u.getId() != Integer.parseInt(u.getName())){
+                       System.out.println(u.getId() + "*-----*" + u.getName());
+                   }
                 }
                 // 让出当前的线程
                 Thread.yield();

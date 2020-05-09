@@ -1,4 +1,4 @@
-package com.lazyboyl.learn.chapter02.c03;
+package com.lazyboyl.learn.chapter02.c23;
 
 /**
  * @author linzf
